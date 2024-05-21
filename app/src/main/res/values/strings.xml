@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ZakAppsNFC</string>
+    <string name="employee_id_s">Employee ID : %s</string>
+    <string name="employee_name_s">Employee Name : %s</string>
+    <string name="clock_in">Clock-In</string>
+    <string name="take_a_break">Take a Break</string>
+    <string name="end_break">End Break</string>
+</resources>
