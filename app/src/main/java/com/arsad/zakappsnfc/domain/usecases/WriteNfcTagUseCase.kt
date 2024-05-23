@@ -10,7 +10,6 @@ class WriteNfcTagUseCase @Inject constructor(
     private val repository: NfcRepository
 ) {
     operator fun invoke(tag: Tag, message: String): Boolean {
-        val ndefMessage = NdefMessage(arrayOf(message.toNdefTextRecord()))
-        return repository.writeNfcTag(tag, ndefMessage)
+        return repository.writeNfcTag(tag, message)
     }
 }

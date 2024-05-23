@@ -5,7 +5,15 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.nfc.NfcAdapter
 import android.nfc.Tag
+import android.nfc.tech.IsoDep
+import android.nfc.tech.MifareClassic
+import android.nfc.tech.MifareUltralight
 import android.nfc.tech.Ndef
+import android.nfc.tech.NdefFormatable
+import android.nfc.tech.NfcA
+import android.nfc.tech.NfcB
+import android.nfc.tech.NfcF
+import android.nfc.tech.NfcV
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -21,7 +29,6 @@ import androidx.lifecycle.lifecycleScope
 import com.arsad.zakappsnfc.R
 import com.arsad.zakappsnfc.presentation.clock.viewmodel.NFCEntryViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -47,12 +54,12 @@ class EntryScreen : AppCompatActivity() {
     private fun setupObservers() {
         lifecycleScope.launch {
             viewModel.userID.collect { userID ->
-                findViewById<TextView>(R.id.userid_tv).apply { setText(userID.toString()) }
+                findViewById<TextView>(R.id.userid_tv).apply { setText(userID) }
             }
         }
         lifecycleScope.launch {
             viewModel.userName.collect { userName ->
-                findViewById<TextView>(R.id.username_tv).apply { setText(userName.toString()) }
+                findViewById<TextView>(R.id.username_tv).apply { setText(userName) }
             }
         }
     }
@@ -85,7 +92,20 @@ class EntryScreen : AppCompatActivity() {
             IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED),
             IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED)
         )
-        nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilters, null)
+        val techLists = arrayOf(
+            arrayOf(
+                NfcA::class.java.name
+            ),
+            arrayOf(NfcB::class.java.name),
+            arrayOf(NfcF::class.java.name),
+            arrayOf(NfcV::class.java.name),
+            arrayOf(IsoDep::class.java.name),
+            arrayOf(MifareClassic::class.java.name),
+            arrayOf(MifareUltralight::class.java.name),
+            arrayOf(Ndef::class.java.name),
+            arrayOf(NdefFormatable::class.java.name)
+        )
+        nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilters, techLists)
     }
 
     override fun onPause() {
